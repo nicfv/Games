@@ -29,6 +29,7 @@ class Player implements Drawable {
 const me: Player = new Player('red', 50, 50);
 
 const game: Canvas = new Canvas({
+    background: 'skyblue',
     border: 'black',
     borderBlur: 'gray',
     loop(dt) {
