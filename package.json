@@ -3,8 +3,12 @@
     "start": "npm start --workspaces",
     "stop": "rm -rf node_modules package-lock.json"
   },
+  "workspaces": [
+    "www/*"
+  ],
   "devDependencies": {
     "@eslint/js": "9.39.1",
+    "ts-loader": "9.5.4",
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.4",
     "webpack-cli": "6.0.1"
