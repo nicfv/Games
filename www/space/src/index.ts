@@ -1,3 +1,6 @@
-let me: string;
-me = 'hello';
-console.log(me);
+import { Canvas } from 'graphico';
+
+const game: Canvas = new Canvas({
+    border: 'black',
+    borderBlur: 'gray',
+});
