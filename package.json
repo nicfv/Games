@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "start": "npm start --workspaces",
     "stop": "rm -rf node_modules package-lock.json"
