@@ -33,18 +33,22 @@ export const game: Canvas = new Canvas({
     background: 'black',
     border: 'black',
     borderBlur: 'gray',
-    // loop(dt) {
-    //     me.step(dt);
-    //     game.clear();
-    //     game.draw(me);
-    // },
-    // keydown(key) {
-    //     if (key === ' ') {
-    //         me.jump(500);
-    //     }
-    // },
+    width: 1280,
+    height: 720,
+    loop(dt) {
+        game.clear();
+        const left: boolean = game.isKeyDown('arrowleft');
+        const right: boolean = game.isKeyDown('arrowright');
+        const up: boolean = game.isKeyDown('arrowup');
+        const down: boolean = game.isKeyDown('arrowdown');
+        for (const star of stars) {
+            star.move((left ? -1 : 0) + (right ? 1 : 0), (up ? -1 : 0) + (down ? 1 : 0), dt);
+            game.draw(star);
+        }
+    },
 });
 
+const stars: Star[] = [];
 for (let i = 0; i < 1000; i++) {
-    game.draw(Star.rand());
+    stars.push(Star.rand());
 }
