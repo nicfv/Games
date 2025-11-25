@@ -4,6 +4,8 @@
     "dev": "../../.github/workflows/dev"
   },
   "dependencies": {
-    "graphico": "1.0.0"
+    "graphico": "1.0.0",
+    "smath": "1.13.2",
+    "viridis": "1.4.1"
   }
 }
