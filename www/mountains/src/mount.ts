@@ -11,7 +11,7 @@ export class Mountain implements Drawable {
         Color.hex('#001122'),
     ]);
     private readonly color: Color;
-    private x_offset: number = 0;
+    private x_offset = 0;
     private readonly x_spacing: number;
     private readonly y_mean: number;
     private readonly mtnHeight: number;
