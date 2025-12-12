@@ -2,7 +2,7 @@ import { Canvas } from 'graphico';
 import { Mountain } from './mount';
 import * as SMath from 'smath';
 
-const layers: number = 6;
+const layers = 6;
 const mounts: Mountain[] = [];
 
 export const game: Canvas = new Canvas({
