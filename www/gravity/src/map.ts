@@ -17,6 +17,7 @@ export class GameMap implements Drawable {
             x: SMath.rint(0, this.size.x / 2 - 1) * 2 + 1,
             y: SMath.rint(0, this.size.y / 2 - 1) * 2 + 1,
         });
+        this.addRooms(2, 8);
     }
     public getTileAt(location: Vec2): TileType {
         return this.tiles[location.x]?.[location.y] ?? 'void';
@@ -27,6 +28,8 @@ export class GameMap implements Drawable {
                 const tile: TileType = this.getTileAt({ x: x, y: y });
                 if (tile === 'path') {
                     graphics.fillStyle = 'green';
+                } else if (tile === 'room') {
+                    graphics.fillStyle = 'lime';
                 } else {
                     graphics.fillStyle = 'gray';
                 }
@@ -53,9 +56,39 @@ export class GameMap implements Drawable {
             }
         }
     }
+    private addRooms(minCount: number, maxCount: number): void {
+        let i: number = 0;
+        let num: number = 0;
+        while (i < minCount || num < minCount) {
+            i++;
+            const location: Vec2 = {
+                x: SMath.rint(0, this.size.x / 2 - 3) * 2 + 1,
+                y: SMath.rint(0, this.size.y / 2 - 3) * 2 + 1,
+            };
+            const size: Vec2 = {
+                x: SMath.rint(0, this.size.x / 4 - 1) * 2 + 3,
+                y: SMath.rint(0, this.size.y / 4 - 1) * 2 + 3,
+            };
+            const bottomRight: Vec2 = {
+                x: location.x + size.x - 1,
+                y: location.y + size.y - 1,
+            };
+            if (bottomRight.x >= this.size.x || bottomRight.y >= this.size.y) {
+                continue;
+            }
+            for (let x = location.x; x <= bottomRight.x; x++) {
+                for (let y = location.y; y <= bottomRight.y; y++) {
+                    this.tiles[x][y] = 'room';
+                }
+            }
+            if (++num > maxCount) {
+                return;
+            }
+        }
+    }
 }
 
-type TileType = 'void' | 'wall' | 'path';
+type TileType = 'void' | 'wall' | 'path' | 'room';
 type Direction = 'left' | 'right' | 'up' | 'down';
 
 const DELTAS: Record<Direction, Vec2> = {
