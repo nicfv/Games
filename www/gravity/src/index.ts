@@ -3,13 +3,13 @@ import { GameMap } from './map';
 import { Player } from './player';
 
 const map: GameMap = new GameMap({ x: 51, y: 51 });
-const player: Player = new Player({ x: 1, y: 1 }, map);
+const player: Player = new Player(map);
 
 export const canv: Canvas = new Canvas({
     width: 51,
     height: 51,
     scale: 10,
-    background: 'blue',
+    background: 'dimgray',
     border: 'black',
     borderBlur: 'gray',
     keydown(key) {
@@ -30,6 +30,7 @@ export const canv: Canvas = new Canvas({
         console.log(key);
     },
     loop(dt) {
+        canv.clear();
         canv.draw(player);
     },
 });

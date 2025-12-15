@@ -33,9 +33,9 @@ export class GameMap implements Drawable {
             for (let y = 0; y < this.size.y; y++) {
                 const tile: TileType = this.getTileAt({ x: x, y: y });
                 if (tile === 'path') {
-                    graphics.fillStyle = 'green';
+                    graphics.fillStyle = 'dimgray';
                 } else if (tile === 'room') {
-                    graphics.fillStyle = 'lime';
+                    graphics.fillStyle = 'dimgray';
                 } else {
                     graphics.fillStyle = 'gray';
                 }
