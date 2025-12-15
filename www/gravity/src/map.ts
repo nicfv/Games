@@ -1,5 +1,5 @@
 import { Drawable } from 'graphico';
-import { Vec2 } from './types';
+import { allDirections, Direction, move, Vec2 } from './types';
 import * as SMath from 'smath';
 
 export class GameMap implements Drawable {
@@ -23,14 +23,8 @@ export class GameMap implements Drawable {
     private getTileAt(location: Vec2): TileType {
         return this.tiles[location.x]?.[location.y] ?? 'void';
     }
-    private move(location: Vec2, direction: Direction, distance: number = 1): Vec2 {
-        return {
-            x: location.x + DELTAS[direction].x * distance,
-            y: location.y + DELTAS[direction].y * distance,
-        };
-    }
     public isWalkable(location: Vec2, direction: Direction): boolean {
-        const tile: TileType = this.getTileAt(this.move(location, direction));
+        const tile: TileType = this.getTileAt(move(location, direction));
         return tile === 'path' || tile === 'room';
     }
     public draw(graphics: CanvasRenderingContext2D): void {
@@ -50,10 +44,10 @@ export class GameMap implements Drawable {
     }
     private step(location: Vec2): void {
         this.tiles[location.x][location.y] = 'path';
-        const directions: Direction[] = SMath.shuffle(Object.keys(DELTAS) as Direction[]);
+        const directions: Direction[] = SMath.shuffle(allDirections);
         for (const direction of directions) {
-            const mid: Vec2 = this.move(location, direction);
-            const dest: Vec2 = this.move(location, direction, 2);
+            const mid: Vec2 = move(location, direction);
+            const dest: Vec2 = move(mid, direction);
             const tile: TileType = this.getTileAt(dest);
             if (tile === 'wall') {
                 this.tiles[mid.x][mid.y] = 'path';
@@ -105,8 +99,8 @@ export class GameMap implements Drawable {
     }
     private countAround(location: Vec2): number {
         let count: number = 0;
-        for (const direction in DELTAS) {
-            if (this.isWalkable(location, direction as Direction)) {
+        for (const direction of allDirections) {
+            if (this.isWalkable(location, direction)) {
                 count++;
             }
         }
@@ -114,12 +108,12 @@ export class GameMap implements Drawable {
     }
     private cleanStep(location: Vec2): void {
         this.tiles[location.x][location.y] = 'wall';
-        for (const direction in DELTAS) {
-            if (this.isWalkable(location, direction as Direction)) {
-                const dest: Vec2 = this.move(location, direction as Direction);
+        for (const direction of allDirections) {
+            if (this.isWalkable(location, direction)) {
+                const dest: Vec2 = move(location, direction);
                 const count: number = this.countAround(dest);
                 if (count <= 1) {
-                    this.cleanStep(this.move(location, direction as Direction));
+                    this.cleanStep(move(location, direction));
                 }
             }
         }
@@ -127,11 +121,3 @@ export class GameMap implements Drawable {
 }
 
 type TileType = 'void' | 'wall' | 'path' | 'room';
-type Direction = 'left' | 'right' | 'up' | 'down';
-
-const DELTAS: Record<Direction, Vec2> = {
-    down: { x: 0, y: 1 },
-    left: { x: -1, y: 0 },
-    right: { x: 1, y: 0 },
-    up: { x: 0, y: -1 },
-};
