@@ -13,9 +13,13 @@ export class GameMap implements Drawable {
                 this.tiles[x][y] = 'wall';
             }
         }
+        this.step({
+            x: SMath.rint(0, this.size.x - 1),
+            y: SMath.rint(0, this.size.y - 1),
+        });
     }
     public getTileAt(location: Vec2): TileType {
-        return this.tiles[location.x][location.y] ?? 'void';
+        return this.tiles[location.x]?.[location.y] ?? 'void';
     }
     public draw(graphics: CanvasRenderingContext2D): void {
         for (let x = 0; x < this.size.x; x++) {
@@ -30,6 +34,33 @@ export class GameMap implements Drawable {
             }
         }
     }
+    private step(location: Vec2): void {
+        this.tiles[location.x][location.y] = 'path';
+        const directions: Direction[] = SMath.shuffle(Object.keys(DELTAS) as Direction[]);
+        for (const direction of directions) {
+            const mid: Vec2 = {
+                x: location.x + DELTAS[direction].x,
+                y: location.y + DELTAS[direction].y,
+            };
+            const dest: Vec2 = {
+                x: location.x + DELTAS[direction].x * 2,
+                y: location.y + DELTAS[direction].y * 2,
+            };
+            const tile: TileType = this.getTileAt(dest);
+            if (tile === 'wall') {
+                this.tiles[mid.x][mid.y] = 'path';
+                this.step(dest);
+            }
+        }
+    }
 }
 
 type TileType = 'void' | 'wall' | 'path';
+type Direction = 'left' | 'right' | 'up' | 'down';
+
+const DELTAS: Record<Direction, Vec2> = {
+    down: { x: 0, y: 1 },
+    left: { x: -1, y: 0 },
+    right: { x: 1, y: 0 },
+    up: { x: 0, y: -1 },
+};
