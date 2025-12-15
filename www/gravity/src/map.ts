@@ -3,7 +3,7 @@ import { Vec2 } from './types';
 import * as SMath from 'smath';
 
 export class GameMap implements Drawable {
-    private static tileSize: Vec2 = { x: 10, y: 10 };
+    private static tileSize: Vec2 = { x: 1, y: 1 };
     private readonly tiles: TileType[][];
     constructor(private readonly size: Vec2) {
         this.tiles = [];
@@ -61,18 +61,18 @@ export class GameMap implements Drawable {
             }
         }
     }
-    private addRooms(minCount: number, maxCount: number): void {
-        let i: number = 0;
-        let num: number = 0;
-        while (i < minCount || num < minCount) {
-            i++;
+    private addRooms(minRooms: number, maxTries: number): void {
+        let tries: number = 0;
+        let rooms: number = 0;
+        while (tries < maxTries || rooms < minRooms) {
+            tries++;
             const location: Vec2 = {
                 x: SMath.rint(0, this.size.x / 2 - 3) * 2 + 1,
                 y: SMath.rint(0, this.size.y / 2 - 3) * 2 + 1,
             };
             const size: Vec2 = {
-                x: SMath.rint(0, this.size.x / 4 - 1) * 2 + 3,
-                y: SMath.rint(0, this.size.y / 4 - 1) * 2 + 3,
+                x: SMath.rint(0, 5) * 2 + 3,
+                y: SMath.rint(0, 5) * 2 + 3,
             };
             const bottomRight: Vec2 = {
                 x: location.x + size.x - 1,
@@ -86,9 +86,7 @@ export class GameMap implements Drawable {
                     this.tiles[x][y] = 'room';
                 }
             }
-            if (++num > maxCount) {
-                return;
-            }
+            rooms++;
         }
     }
     private clean(): void {
@@ -96,11 +94,11 @@ export class GameMap implements Drawable {
             for (let y = 0; y < this.size.y; y++) {
                 const location: Vec2 = { x: x, y: y };
                 const tile: TileType = this.getTileAt(location);
-                if (tile === 'path' || tile === 'room') {
-                    const count: number = this.countAround(location);
-                    if (count <= 1) {
-                        this.cleanStep(location);
-                    }
+                const count: number = this.countAround(location);
+                if ((tile === 'path' || tile === 'room') && count <= 1) {
+                    this.cleanStep(location);
+                } else if (tile === 'wall' && count === 4) {
+                    this.tiles[x][y] = 'path';
                 }
             }
         }
