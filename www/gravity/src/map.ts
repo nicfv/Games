@@ -1,34 +1,35 @@
 import { Drawable } from 'graphico';
-import { Tile } from './tile';
-import { Point } from './point';
+import { Vec2 } from './types';
+import * as SMath from 'smath';
 
 export class GameMap implements Drawable {
-    constructor(private readonly tiles: Tile[]) { }
-    public getTileAt(location: Point): Tile {
-        return this.tiles.find(tile => tile.location.equals(location)) ?? new Tile(location, 'void');
+    private static tileSize: Vec2 = { x: 10, y: 10 };
+    private readonly tiles: TileType[][];
+    constructor(private readonly size: Vec2) {
+        this.tiles = [];
+        for (let x = 0; x < size.x; x++) {
+            this.tiles[x] = [];
+            for (let y = 0; y < size.y; y++) {
+                this.tiles[x][y] = 'wall';
+            }
+        }
+    }
+    public getTileAt(location: Vec2): TileType {
+        return this.tiles[location.x][location.y] ?? 'void';
     }
     public draw(graphics: CanvasRenderingContext2D): void {
-        for (const tile of this.tiles) {
-            tile.draw(graphics);
-        }
-    }
-    public static generate(size: Point): GameMap {
-        const ids: number[][] = [];
-        for (let x = 0; x < size.x; x++) {
-            ids[x] = [];
-            for (let y = 0; y < size.y; y++) {
-                ids[x][y] = x % y;
+        for (let x = 0; x < this.size.x; x++) {
+            for (let y = 0; y < this.size.y; y++) {
+                const tile: TileType = this.getTileAt({ x: x, y: y });
+                if (tile === 'path') {
+                    graphics.fillStyle = 'green';
+                } else {
+                    graphics.fillStyle = 'gray';
+                }
+                graphics.fillRect(x * GameMap.tileSize.x, y * GameMap.tileSize.y, GameMap.tileSize.x, GameMap.tileSize.y);
             }
         }
-        const tiles: Tile[] = [];
-        for (let x = 0; x < size.x; x++) {
-            for (let y = 0; y < size.y; y++) {
-                tiles.push(new Tile(new Point(x, y), ids[x][y] === 1 ? 'path' : 'wall'));
-            }
-        }
-        return new GameMap(tiles);
-    }
-    private static step(location: Point, tiles: Tile[]): void {
-        // const dir
     }
 }
+
+type TileType = 'void' | 'wall' | 'path';
