@@ -14,8 +14,8 @@ export class GameMap implements Drawable {
             }
         }
         this.step({
-            x: SMath.rint(0, this.size.x - 1),
-            y: SMath.rint(0, this.size.y - 1),
+            x: SMath.rint(0, this.size.x / 2 - 1) * 2 + 1,
+            y: SMath.rint(0, this.size.y / 2 - 1) * 2 + 1,
         });
     }
     public getTileAt(location: Vec2): TileType {
