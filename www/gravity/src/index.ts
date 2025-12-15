@@ -5,31 +5,33 @@ import { Player } from './player';
 const map: GameMap = new GameMap({ x: 51, y: 51 });
 const player: Player = new Player(map);
 
+const max_input_dt: number = 100;
+let input_dt: number = 0;
+
 export const canv: Canvas = new Canvas({
-    width: 51,
-    height: 51,
+    width: 50,
+    height: 50,
     scale: 10,
     background: 'dimgray',
     border: 'black',
     borderBlur: 'gray',
-    keydown(key) {
-        if (key === 'arrowleft') {
-            player.movePlayer('left');
-        }
-        if (key === 'arrowright') {
-            player.movePlayer('right');
-        }
-        if (key === 'arrowup') {
-            player.movePlayer('up');
-        }
-        if (key === 'arrowdown') {
-            player.movePlayer('down');
-        }
-    },
-    keyup(key) {
-        console.log(key);
-    },
     loop(dt) {
+        input_dt += dt;
+        if (input_dt > max_input_dt) {
+            input_dt %= max_input_dt;
+            if (canv.isKeyDown('arrowleft') || canv.isKeyDown('a')) {
+                player.movePlayer('left');
+            }
+            if (canv.isKeyDown('arrowright') || canv.isKeyDown('d')) {
+                player.movePlayer('right');
+            }
+            if (canv.isKeyDown('arrowup') || canv.isKeyDown('w')) {
+                player.movePlayer('up');
+            }
+            if (canv.isKeyDown('arrowdown') || canv.isKeyDown('s')) {
+                player.movePlayer('down');
+            }
+        }
         canv.clear();
         canv.draw(player);
     },
