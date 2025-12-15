@@ -1,9 +1,8 @@
 import { Drawable } from 'graphico';
-import { allDirections, Direction, move, Vec2 } from './types';
+import { allDirections, Direction, move, tileSize, Vec2 } from './types';
 import * as SMath from 'smath';
 
 export class GameMap implements Drawable {
-    private static tileSize: Vec2 = { x: 1, y: 1 };
     private readonly tiles: TileType[][];
     public readonly spawnPoint: Vec2;
     constructor(private readonly size: Vec2) {
@@ -39,7 +38,7 @@ export class GameMap implements Drawable {
                 } else {
                     graphics.fillStyle = 'gray';
                 }
-                graphics.fillRect(x * GameMap.tileSize.x, y * GameMap.tileSize.y, GameMap.tileSize.x, GameMap.tileSize.y);
+                graphics.fillRect(x * tileSize.x, y * tileSize.y, tileSize.x, tileSize.y);
             }
         }
     }

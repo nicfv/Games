@@ -1,5 +1,5 @@
 import { Drawable } from 'graphico';
-import { Direction, move, Vec2 } from './types';
+import { Direction, move, tileSize, Vec2 } from './types';
 import { GameMap } from './map';
 
 export class Player implements Drawable {
@@ -14,10 +14,10 @@ export class Player implements Drawable {
     }
     public draw(graphics: CanvasRenderingContext2D): void {
         graphics.save();
-        graphics.translate(((graphics.canvas.width / 2) | 0) - this.location.x, ((graphics.canvas.height / 2) | 0) - this.location.y);
+        graphics.translate(((graphics.canvas.width / 2) | 0) - this.location.x * tileSize.x, ((graphics.canvas.height / 2) | 0) - this.location.y * tileSize.y);
         this.map.draw(graphics);
         graphics.fillStyle = 'red';
-        graphics.fillRect(this.location.x, this.location.y, 1, 1);
+        graphics.fillRect(this.location.x * tileSize.x, this.location.y * tileSize.y, tileSize.x, tileSize.y);
         graphics.restore();
     }
 }

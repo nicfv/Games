@@ -20,3 +20,5 @@ const DELTAS: Record<Direction, Vec2> = {
 };
 
 export const allDirections: Direction[] = Object.keys(DELTAS) as Direction[];
+
+export const tileSize: Vec2 = { x: 1, y: 1 };
