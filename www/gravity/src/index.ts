@@ -2,7 +2,7 @@ import { Canvas } from 'graphico';
 import { GameMap } from './map';
 import { Player } from './player';
 
-const map: GameMap = new GameMap({ x: 51, y: 51 });
+const map: GameMap = new GameMap({ x: 101, y: 101 });
 const player: Player = new Player(map);
 
 const max_input_dt: number = 100;
