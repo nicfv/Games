@@ -1,8 +1,7 @@
 import { Canvas } from 'graphico';
 import { GameMap } from './map';
-import { Point } from './point';
 
-const map: GameMap = GameMap.generate(new Point(50, 30));
+const map: GameMap = new GameMap({ x: 10, y: 10 });
 
 export const canv: Canvas = new Canvas({
     background: 'blue',
