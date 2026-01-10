@@ -5,6 +5,7 @@ import * as SMath from 'smath';
 export class GameMap implements Drawable {
     private readonly tiles: TileType[][];
     public readonly spawnPoint: Vec2;
+    public readonly collectibleLocations: Vec2[];
     constructor(private readonly size: Vec2) {
         this.tiles = [];
         for (let x = 0; x < size.x; x++) {
@@ -18,6 +19,7 @@ export class GameMap implements Drawable {
             y: SMath.rint(0, this.size.y / 2 - 1) * 2 + 1,
         });
         this.spawnPoint = this.addRooms(2, 8);
+        this.collectibleLocations = [];
         this.clean();
     }
     private getTileAt(location: Vec2): TileType {
@@ -86,7 +88,9 @@ export class GameMap implements Drawable {
                 x: SMath.rint(location.x, bottomRight.x),
                 y: SMath.rint(location.y, bottomRight.y),
             };
+            this.collectibleLocations.push(spawn);
         }
+        this.collectibleLocations.pop();
         return spawn;
     }
     private clean(): void {
