@@ -5,8 +5,8 @@ import { Player } from './player';
 const map: GameMap = new GameMap({ x: 101, y: 101 });
 const player: Player = new Player(map);
 
-const max_input_dt: number = 100;
-let input_dt: number = 0;
+const max_input_dt = 100;
+let input_dt = 0;
 
 export const canv: Canvas = new Canvas({
     width: 50,

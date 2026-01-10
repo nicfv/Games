@@ -56,8 +56,8 @@ export class GameMap implements Drawable {
         }
     }
     private addRooms(minRooms: number, maxTries: number): Vec2 {
-        let tries: number = 0;
-        let rooms: number = 0;
+        let tries = 0;
+        let rooms = 0;
         let spawn: Vec2 = { x: 0, y: 0 };
         while (tries < maxTries || rooms < minRooms) {
             tries++;
@@ -104,7 +104,7 @@ export class GameMap implements Drawable {
         }
     }
     private countAround(location: Vec2): number {
-        let count: number = 0;
+        let count = 0;
         for (const direction of allDirections) {
             if (this.isWalkable(location, direction)) {
                 count++;
