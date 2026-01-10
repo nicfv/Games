@@ -1,12 +1,15 @@
 import { Canvas } from 'graphico';
 import { GameMap } from './map';
 import { Player } from './player';
+import { Collectibles, CompletionBar } from './collectible';
 
 const map: GameMap = new GameMap({ x: 101, y: 101 });
-const player: Player = new Player(map);
+const completionBar: CompletionBar = new CompletionBar({ x: 1, y: 1 }, { x: 48, y: 1 }, 'lime', 'horiz');
+const collectibles: Collectibles = new Collectibles(map, completionBar);
+const player: Player = new Player(map, collectibles);
 
-const max_input_dt: number = 100;
-let input_dt: number = 0;
+const max_input_dt = 100;
+let input_dt = 0;
 
 export const canv: Canvas = new Canvas({
     width: 50,
@@ -34,5 +37,6 @@ export const canv: Canvas = new Canvas({
         }
         canv.clear();
         canv.draw(player);
+        canv.draw(completionBar);
     },
 });

@@ -5,6 +5,7 @@ import * as SMath from 'smath';
 export class GameMap implements Drawable {
     private readonly tiles: TileType[][];
     public readonly spawnPoint: Vec2;
+    public readonly collectibleLocations: Vec2[];
     constructor(private readonly size: Vec2) {
         this.tiles = [];
         for (let x = 0; x < size.x; x++) {
@@ -17,6 +18,7 @@ export class GameMap implements Drawable {
             x: SMath.rint(0, this.size.x / 2 - 1) * 2 + 1,
             y: SMath.rint(0, this.size.y / 2 - 1) * 2 + 1,
         });
+        this.collectibleLocations = [];
         this.spawnPoint = this.addRooms(2, 8);
         this.clean();
     }
@@ -56,8 +58,8 @@ export class GameMap implements Drawable {
         }
     }
     private addRooms(minRooms: number, maxTries: number): Vec2 {
-        let tries: number = 0;
-        let rooms: number = 0;
+        let tries = 0;
+        let rooms = 0;
         let spawn: Vec2 = { x: 0, y: 0 };
         while (tries < maxTries || rooms < minRooms) {
             tries++;
@@ -86,7 +88,9 @@ export class GameMap implements Drawable {
                 x: SMath.rint(location.x, bottomRight.x),
                 y: SMath.rint(location.y, bottomRight.y),
             };
+            this.collectibleLocations.push(spawn);
         }
+        this.collectibleLocations.pop();
         return spawn;
     }
     private clean(): void {
@@ -104,7 +108,7 @@ export class GameMap implements Drawable {
         }
     }
     private countAround(location: Vec2): number {
-        let count: number = 0;
+        let count = 0;
         for (const direction of allDirections) {
             if (this.isWalkable(location, direction)) {
                 count++;
