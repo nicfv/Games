@@ -3,7 +3,7 @@ import { tileSize, Vec2 } from './types';
 import { GameMap } from './map';
 
 export class CompletionBar implements Drawable {
-    constructor(private readonly location: Vec2, private readonly maxSize: Vec2, private readonly color: string, private readonly stretch: 'horiz' | 'vert', public percentComplete: number = 0) { }
+    constructor(private readonly location: Vec2, private readonly maxSize: Vec2, private readonly color: string, private readonly stretch: 'horiz' | 'vert', public percentComplete = 0) { }
     public draw(graphics: CanvasRenderingContext2D): void {
         graphics.fillStyle = this.color;
         const width: number = (this.stretch === 'vert' ? 1 : this.percentComplete) * this.maxSize.x;
