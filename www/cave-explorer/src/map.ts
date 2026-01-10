@@ -18,8 +18,8 @@ export class GameMap implements Drawable {
             x: SMath.rint(0, this.size.x / 2 - 1) * 2 + 1,
             y: SMath.rint(0, this.size.y / 2 - 1) * 2 + 1,
         });
-        this.spawnPoint = this.addRooms(2, 8);
         this.collectibleLocations = [];
+        this.spawnPoint = this.addRooms(2, 8);
         this.clean();
     }
     private getTileAt(location: Vec2): TileType {
