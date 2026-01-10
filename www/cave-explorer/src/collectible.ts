@@ -3,9 +3,12 @@ import { tileSize, Vec2 } from './types';
 import { GameMap } from './map';
 
 export class CompletionBar implements Drawable {
-    constructor(private readonly location: Vec2, private readonly maxSize: Vec2, private readonly color: string, private readonly stretch: 'horiz' | 'vert', public percentComplete: number) { }
+    constructor(private readonly location: Vec2, private readonly maxSize: Vec2, private readonly color: string, private readonly stretch: 'horiz' | 'vert', public percentComplete: number = 0) { }
     public draw(graphics: CanvasRenderingContext2D): void {
-        throw new Error('Method not implemented.');
+        graphics.fillStyle = this.color;
+        const width: number = (this.stretch === 'vert' ? 1 : this.percentComplete) * this.maxSize.x;
+        const height: number = (this.stretch === 'horiz' ? 1 : this.percentComplete) * this.maxSize.y;
+        graphics.fillRect(this.location.x, this.location.y, width, height);
     }
 }
 
@@ -19,13 +22,11 @@ export class Collectibles implements Drawable {
         }
         this.total = this.collectibles.length;
     }
-    public getPercentComplete(): number {
-        return 1 - (this.collectibles.length / this.total);
-    }
     public collect(location: Vec2): void {
         const index: number = this.collectibles.findIndex(collectible => collectible.isAt(location));
         if (index >= 0) {
             this.collectibles.splice(index, 1);
+            this.completionBar.percentComplete = 1 - (this.collectibles.length / this.total);
 
         }
     }
