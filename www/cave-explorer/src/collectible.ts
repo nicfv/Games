@@ -8,7 +8,7 @@ export class CompletionBar implements Drawable {
         graphics.fillStyle = this.color;
         const width: number = (this.stretch === 'vert' ? 1 : this.percentComplete) * this.maxSize.x;
         const height: number = (this.stretch === 'horiz' ? 1 : this.percentComplete) * this.maxSize.y;
-        graphics.fillRect(this.location.x, this.location.y, width, height);
+        graphics.fillRect(this.location.x, this.location.y, width | 0, height | 0);
     }
 }
 
@@ -30,6 +30,9 @@ export class Collectibles implements Drawable {
 
         }
     }
+    public collectibleLocations(): Vec2[] {
+        return this.collectibles.map(collectible => collectible.location);
+    }
     public draw(graphics: CanvasRenderingContext2D): void {
         for (const collectible of this.collectibles) {
             collectible.draw(graphics);
@@ -38,7 +41,7 @@ export class Collectibles implements Drawable {
 }
 
 class Collectible implements Drawable {
-    constructor(private readonly location: Vec2) { }
+    constructor(public readonly location: Vec2) { }
     public isAt(location: Vec2): boolean {
         return location.x === this.location.x && location.y === this.location.y;
     }
