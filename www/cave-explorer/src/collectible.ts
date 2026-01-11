@@ -8,7 +8,7 @@ export class CompletionBar implements Drawable {
         graphics.fillStyle = this.color;
         const width: number = (this.stretch === 'vert' ? 1 : this.percentComplete) * this.maxSize.x;
         const height: number = (this.stretch === 'horiz' ? 1 : this.percentComplete) * this.maxSize.y;
-        graphics.fillRect(this.location.x, this.location.y, width, height);
+        graphics.fillRect(this.location.x, this.location.y, width | 0, height | 0);
     }
 }
 
