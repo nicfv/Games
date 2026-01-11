@@ -14,6 +14,9 @@ export class Player implements Drawable {
             this.collectibles.collect(this.location);
         }
     }
+    public getLocation(): Vec2 {
+        return this.location;
+    }
     public draw(graphics: CanvasRenderingContext2D): void {
         graphics.save();
         graphics.translate(((graphics.canvas.width / 2) | 0) - this.location.x * tileSize.x, ((graphics.canvas.height / 2) | 0) - this.location.y * tileSize.y);

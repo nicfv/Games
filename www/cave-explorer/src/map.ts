@@ -6,7 +6,7 @@ export class GameMap implements Drawable {
     private readonly tiles: TileType[][];
     public readonly spawnPoint: Vec2;
     public readonly collectibleLocations: Vec2[];
-    constructor(private readonly size: Vec2) {
+    constructor(public readonly size: Vec2) {
         this.tiles = [];
         for (let x = 0; x < size.x; x++) {
             this.tiles[x] = [];
