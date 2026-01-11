@@ -20,7 +20,8 @@ export class GameMap implements Drawable {
         });
         this.collectibleLocations = [];
         this.spawnPoint = this.addRooms(2, 8);
-        this.clean();
+        this.cleanPaths();
+        this.cleanWalls();
     }
     private getTileAt(location: Vec2): TileType {
         return this.tiles[location.x]?.[location.y] ?? 'void';
@@ -93,14 +94,14 @@ export class GameMap implements Drawable {
         this.collectibleLocations.pop();
         return spawn;
     }
-    private clean(): void {
+    private cleanPaths(): void {
         for (let x = 0; x < this.size.x; x++) {
             for (let y = 0; y < this.size.y; y++) {
                 const location: Vec2 = { x: x, y: y };
                 const tile: TileType = this.getTileAt(location);
                 const count: number = this.countAround(location);
                 if ((tile === 'path' || tile === 'room') && count <= 1) {
-                    this.cleanStep(location);
+                    this.cleanPathStep(location);
                 } else if (tile === 'wall' && count === 4) {
                     this.tiles[x][y] = 'path';
                 }
@@ -116,14 +117,38 @@ export class GameMap implements Drawable {
         }
         return count;
     }
-    private cleanStep(location: Vec2): void {
+    private cleanPathStep(location: Vec2): void {
         this.tiles[location.x][location.y] = 'wall';
         for (const direction of allDirections) {
             if (this.isWalkable(location, direction)) {
                 const dest: Vec2 = move(location, direction);
                 const count: number = this.countAround(dest);
                 if (count <= 1) {
-                    this.cleanStep(move(location, direction));
+                    this.cleanPathStep(move(location, direction));
+                }
+            }
+        }
+    }
+    private cleanWalls(): void {
+        for (let x = 0; x < this.size.x; x++) {
+            for (let y = 0; y < this.size.y; y++) {
+                const location: Vec2 = { x: x, y: y };
+                const tile: TileType = this.getTileAt(location);
+                const count: number = this.countAround(location);
+                if (tile === 'wall' && count >= 3) {
+                    this.cleanWallStep(location);
+                }
+            }
+        }
+    }
+    private cleanWallStep(location: Vec2): void {
+        this.tiles[location.x][location.y] = 'path';
+        for (const direction of allDirections) {
+            if (!this.isWalkable(location, direction)) {
+                const dest: Vec2 = move(location, direction);
+                const count: number = this.countAround(dest);
+                if (count >= 3) {
+                    this.cleanWallStep(move(location, direction));
                 }
             }
         }
